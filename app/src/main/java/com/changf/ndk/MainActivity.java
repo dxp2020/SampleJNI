@@ -77,7 +77,7 @@ public class MainActivity extends Activity {
     }
 
     @OnClick({R.id.btn_add, R.id.btn_minus, R.id.btn_multiply, R.id.btn_divide, R.id.btn_remind_array, R.id.btn_delete_array_value, R.id.btn_add_array_value
-            ,R.id.btn_call_instance_method, R.id.btn_call_static_method})
+            ,R.id.btn_call_instance_method, R.id.btn_call_static_method,R.id.btn_call_instance_attr,R.id.btn_call_static_attr,R.id.btn_call_construct_method,R.id.btn_call_superclass_method})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_add:
@@ -115,6 +115,21 @@ public class MainActivity extends Activity {
             case R.id.btn_call_static_method:
                 callJavaInfo = NativeMethed.getInstance().callStaticMethod();
                 showCallJava();
+                break;
+            case R.id.btn_call_instance_attr:
+                callJavaInfo = NativeMethed.getInstance().callInstanceAttr();
+                showCallJava();
+                break;
+            case R.id.btn_call_static_attr:
+                callJavaInfo = NativeMethed.getInstance().callStaticAttr();
+                showCallJava();
+                break;
+            case R.id.btn_call_construct_method:
+                callJavaInfo = NativeMethed.getInstance().callConstructMethod().getConstructAttr();
+                showCallJava();
+                break;
+            case R.id.btn_call_superclass_method:
+
                 break;
         }
     }
