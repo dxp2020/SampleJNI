@@ -220,17 +220,57 @@ Java_com_changf_ndk_lib_NativeMethed_callStaticAttr(JNIEnv *env, jobject instanc
 
 JNIEXPORT jobject JNICALL
 Java_com_changf_ndk_lib_NativeMethed_callConstructMethod(JNIEnv *env, jobject instance) {
-    jclass cls = (*env)->GetObjectClass(env,instance);
-    jmethodID methodId = (*env)->GetMethodID(env,cls,"<init>","(Ljava/lang/String;)V");
-    //实例化Student并传递参数
-    jstring msgJstr = (*env)->NewStringUTF(env,"JIN调用了NativeMethed的构造方法");
+    jclass cls;
+    jmethodID methodId;
+    jstring msgJstr;
+    //根据jobject得到jclass
+    cls = (*env)->GetObjectClass(env,instance);
+    //根据jclass得到构造方法methodId
+    methodId = (*env)->GetMethodID(env,cls,"<init>","(Ljava/lang/String;)V");
+    //得到构造方法的参数
+    msgJstr = (*env)->NewStringUTF(env,"JIN调用了NativeMethed的构造方法生成对象");
+    //实例化构造方法
+    jobject obj =  (*env)->NewObject(env,cls,methodId,msgJstr);
 
-    return (*env)->NewObject(env,cls,methodId,msgJstr);
+    (*env)->DeleteLocalRef(env, cls);
+    (*env)->DeleteLocalRef(env, msgJstr);
+    return obj;
 }
 
 JNIEXPORT jstring JNICALL
 Java_com_changf_ndk_lib_NativeMethed_callSuperClassMethod(JNIEnv *env, jobject instance) {
+    jclass cls_cat;
+    jclass cls_anima;
+    jobject obj_cat;
+    jmethodID mid_cat_name;
+    jmethodID mid_anima_name;
+    jmethodID mid_contruct_cat;
+    jstring  jstr_name;
+    jstring  jstr_result;
 
+    //获取cat的jclass
+    cls_cat = (*env)->FindClass(env,"com/changf/ndk/mode/Cat");
+    //cat构造方法methodID
+    mid_contruct_cat = (*env)->GetMethodID(env,cls_cat,"<init>","(Ljava/lang/String;)V");
+    //获取cat构造方法的参数
+    jstr_name = (*env)->NewStringUTF(env,"汤姆猫");
+    //调用构造方法
+    obj_cat = (*env)->NewObject(env,cls_cat,mid_contruct_cat,jstr_name);
+    //获取cat实例方法getName的methodID
+    mid_cat_name = (*env)->GetMethodID(env,cls_cat,"getName","()Ljava/lang/String;");
+    //调用cat的getName方法
+//    jstr_result = (*env)->CallObjectMethod(env,obj_cat,mid_cat_name);
 
-//    return (*env)->NewStringUTF(env, returnValue);
+    //获取anima的jclass
+    cls_anima = (*env)->FindClass(env,"com/changf/ndk/mode/Anima");
+    //获取anima类getName的methodID
+    mid_anima_name = (*env)->GetMethodID(env,cls_anima,"getName","()Ljava/lang/String;");
+    //调用cat的父类的getName方法
+    jstr_result = (*env)->CallNonvirtualObjectMethod(env,obj_cat,cls_anima,mid_anima_name);
+
+    (*env)->DeleteLocalRef(env, cls_cat);
+    (*env)->DeleteLocalRef(env, cls_anima);
+    (*env)->DeleteLocalRef(env, obj_cat);
+    (*env)->DeleteLocalRef(env, jstr_name);
+    return jstr_result;
 }

@@ -129,7 +129,8 @@ public class MainActivity extends Activity {
                 showCallJava();
                 break;
             case R.id.btn_call_superclass_method:
-
+                callJavaInfo = NativeMethed.getInstance().callSuperClassMethod();
+                showCallJava();
                 break;
         }
     }
